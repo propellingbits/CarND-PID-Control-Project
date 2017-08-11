@@ -1,0 +1,37 @@
+
+Hello,
+
+It took way long time to setup my machine than coding for this project. I initialized PID variables to following values as mentioned in the lesson.
+
+double init_Kp = .2;
+double init_Ki = 0.004
+double init_Kd = 3.0;
+  
+After this, I implemented my own PID controller. Updating p,i,d variables by processing each CTE value passed in from simulator like below -
+
+UpdateError(double cte) {
+    d_error = cte - p_error;
+    p_error = cte;
+    i_error += cte;    
+}
+
+At last, I added another function to calculate total error. The value of steering gets set to return value of this function which keeps the car on the road.
+
+double PID::TotalError() {
+    return -Kp*p_error - Kd*d_error - Ki*i_error;
+}
+
+And, this is how it is getting passed back to simulator -
+
+steer_value = pid.TotalError();
+          
+msgJson["steering_angle"] = steer_value;
+msgJson["throttle"] = 0.3;
+auto msg = "42[\"steer\"," + msgJson.dump() + "]";         
+ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
+
+I could not upload project video to github due to size limit but you can watch it here - https://1drv.ms/v/s!Aq7BFntzgMejg6pkeq0RPafNLd69xQ 
+
+I wanted to experiment more with this project but due to lack of time (as I have two more projects pending) I could not do it.
+
+Thanks.
